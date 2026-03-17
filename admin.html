@@ -1370,6 +1370,8 @@
                 </div>
             </div>
 
+
+
             <div class="form-group">
                 <label class="form-label">Balance Adjustment (€)</label>
                 <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 12px;">
@@ -1618,19 +1620,23 @@
             if (!user) return;
 
             const statusMap = {
-                'unfreeze': 'active',
                 'freeze': 'frozen',
                 'block': 'blocked',
-                'suspend': 'suspended'
+                'suspend': 'suspended',
+                'unfreeze': 'active'
             };
 
             const newStatus = statusMap[action];
+            if (!newStatus) return;
+
             VanstraBank.updateUser({...user, accountStatus: newStatus});
             const users = VanstraBank.getAllUsers();
             localStorage.setItem('vanstraUsers', JSON.stringify(users.reduce((obj, u) => {obj[u.id] = u; return obj}, {})));
             loadUsersManagement();
-            showNotification('Account Status Updated', `User account status has been changed to ${newStatus}. If the user experiences any issues, they can contact support.`);
+            showNotification('Account Status Updated', `User account has been ${action === 'unfreeze' ? 'activated' : action === 'freeze' ? 'frozen' : action === 'block' ? 'blocked' : action === 'suspend' ? 'suspended' : action + 'd'} successfully.`);
         }
+
+
 
         function adjustBalance(userId, action) {
             const user = allUsers.find(u => u.id === userId);

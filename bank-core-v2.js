@@ -200,6 +200,17 @@ const VanstraBank = (function() {
             return { success: false, error: 'Account locked. Contact support.' };
         }
 
+        // Check account status for restrictions
+        if (user.accountStatus === 'frozen') {
+            return { success: false, error: 'Account frozen. Enter suspension code to unlock.', requiresCode: true, codeType: 'COT', restrictionType: 'frozen' };
+        }
+        if (user.accountStatus === 'blocked') {
+            return { success: false, error: 'Account blocked. Enter suspension code to unlock.', requiresCode: true, codeType: 'AFD', restrictionType: 'blocked' };
+        }
+        if (user.accountStatus === 'suspended') {
+            return { success: false, error: 'Account suspended. Enter suspension code to unlock.', requiresCode: true, codeType: 'SVR', restrictionType: 'suspended' };
+        }
+
         // Verify password (support multiple legacy formats)
         const plain = password || '';
         const computedHash = hashString(plain);
@@ -1230,19 +1241,34 @@ const VanstraBank = (function() {
     }
 
     function initializeSuspensionChallenge(userId) {
-        // Create a new suspension challenge session
+        const user = getCurrentUser();
+        if (!user) return null;
+
+        // Determine which code is required based on account status
+        let requiredCode = 'COT'; // default
+        if (user.accountStatus === 'frozen' || user.status === 'frozen') {
+            requiredCode = 'COT';
+        } else if (user.accountStatus === 'blocked' || user.status === 'blocked') {
+            requiredCode = 'AFD';
+        } else if (user.accountStatus === 'suspended' || user.status === 'suspended') {
+            requiredCode = 'SVR';
+        } else if (user.accountStatus === 'locked' || user.status === 'locked') {
+            requiredCode = 'ACE';
+        }
+
+        // Create a new suspension challenge session with only 1 code
         const challenge = {
             userId,
-            codesRequired: ['COT', 'AFD', 'SVR', 'ACE', 'FVP'],
+            codesRequired: [requiredCode], // Only one code now
             codesEntered: [],
             currentStep: 0,
             startTime: new Date().toISOString(),
             sessionId: 'SUSP-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6)
         };
-        
+
         // Store in sessionStorage so it persists during the session
         sessionStorage.setItem('suspensionChallenge', JSON.stringify(challenge));
-        
+
         return challenge;
     }
 
@@ -1277,13 +1303,13 @@ const VanstraBank = (function() {
         });
         challenge.currentStep++;
 
-        // Check if all codes have been verified
+        // Check if all codes have been verified (now just 1 code)
         if (challenge.currentStep >= challenge.codesRequired.length) {
             // All codes verified - unlock the account
             const users = JSON.parse(localStorage.getItem('vanstraUsers'));
             const user = users[challenge.userId];
             if (user) {
-                user.status = 'active';
+                user.accountStatus = 'active';
                 user.suspensionVerifiedAt = new Date().toISOString();
                 users[challenge.userId] = user;
                 localStorage.setItem('vanstraUsers', JSON.stringify(users));
@@ -1302,6 +1328,7 @@ const VanstraBank = (function() {
             };
         }
 
+        // This should never be reached with single code system, but keeping for compatibility
         // Update the challenge
         sessionStorage.setItem('suspensionChallenge', JSON.stringify(challenge));
 
@@ -1309,12 +1336,66 @@ const VanstraBank = (function() {
         return {
             success: true,
             completed: false,
-            requiresCustomerServiceContact: true,
-            message: `Code verified! Please contact customer service before proceeding.`,
+            requiresCustomerServiceContact: false, // No longer needed for single code
+            message: `Code verified! Account will be unlocked.`,
             currentStep: challenge.currentStep,
             totalSteps: challenge.codesRequired.length,
             nextCode,
             progress: Math.round((challenge.currentStep / challenge.codesRequired.length) * 100)
+        };
+    }
+
+    function verifyAccountUnlockCode(userId, code, restrictionType) {
+        const SUSPENSION_CODES = {
+            'COT': '962101',
+            'AFD': '385247',
+            'SVR': '704856',
+            'ACE': '521690',
+            'FVP': '813429'
+        };
+
+        // Map restriction types to required codes
+        const codeMapping = {
+            'frozen': 'COT',
+            'blocked': 'AFD',
+            'suspended': 'SVR'
+        };
+
+        const requiredCodeKey = codeMapping[restrictionType];
+        if (!requiredCodeKey) {
+            return { success: false, error: 'Invalid restriction type' };
+        }
+
+        const expectedCode = SUSPENSION_CODES[requiredCodeKey];
+        if (code.trim() !== expectedCode) {
+            return { 
+                success: false, 
+                error: `Invalid code for ${restrictionType} account. Required code: ${requiredCodeKey} (${expectedCode})`
+            };
+        }
+
+        // Code is correct - unlock the account
+        const users = JSON.parse(localStorage.getItem('vanstraUsers'));
+        const user = users[userId];
+        if (!user) {
+            return { success: false, error: 'User not found' };
+        }
+
+        user.accountStatus = 'active';
+        user.unlockedAt = new Date().toISOString();
+        users[userId] = user;
+        localStorage.setItem('vanstraUsers', JSON.stringify(users));
+
+        emit('account_unlocked', { 
+            userId: userId, 
+            restrictionType: restrictionType,
+            unlockedAt: user.unlockedAt 
+        });
+
+        return {
+            success: true,
+            message: `Account successfully unlocked! Your ${restrictionType} restriction has been removed.`,
+            user: sanitizeForClient(user)
         };
     }
 
@@ -1368,6 +1449,7 @@ const VanstraBank = (function() {
         initializeSuspensionChallenge,
         getCurrentSuspensionChallenge,
         verifySuspensionCode,
+        verifyAccountUnlockCode,
         clearSuspensionChallenge,
         
         // Events

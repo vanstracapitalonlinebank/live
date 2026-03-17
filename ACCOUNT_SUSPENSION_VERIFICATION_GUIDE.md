@@ -1,41 +1,40 @@
 # Account Suspension Verification System
 
 ## Overview
-When an admin freezes or suspends a user account, the system now requires the user to verify their identity by entering **5 sequential verification codes** before they can access any platform features.
+When an admin freezes or suspends a user account, the system now requires the user to verify their identity by entering **1 verification code** that corresponds to their account status before they can access any platform features.
 
 ## Verification Codes
 
-Each code represents a different banking abbreviation:
+The system now uses **1 verification code** that corresponds to the account's current status:
 
-| Step | Code Type | Code | Full Name |
-|------|-----------|------|-----------|
-| 1 | **COT** | `962101` | Customer Offset Token |
-| 2 | **AFD** | `385247` | Account Freeze Directive |
-| 3 | **SVR** | `704856` | Suspension Verification Request |
-| 4 | **ACE** | `521690` | Account Clearance Encryption |
-| 5 | **FVP** | `813429` | Final Verification Protocol |
+| Account Status | Code Type | Code | Full Name |
+|----------------|-----------|------|-----------|
+| Frozen | **COT** | `962101` | Customer Offset Token |
+| Blocked | **AFD** | `385247` | Account Freeze Directive |
+| Suspended | **SVR** | `704856` | Suspension Verification Request |
+| Locked | **ACE** | `521690` | Account Clearance Encryption |
 
 ## How It Works
 
 ### For Users
-1. When a user logs in with a **frozen**, **suspended**, or **locked** account:
-   - The dashboard loads
-   - A verification modal immediately appears
-   - All page interaction is blocked (overlaid)
+1. When a user logs in with a **frozen**, **suspended**, **blocked**, or **locked** account:
+   - Login succeeds and user is redirected to the dashboard
+   - A verification modal immediately appears on the dashboard
+   - All dashboard interaction is blocked (overlaid) until verification is complete
    
-2. The user enters the codes one at a time:
-   - The modal displays which code is required (e.g., "Enter COT Code")
+2. The user enters the code that corresponds to their account status:
+   - The modal displays which code is required (e.g., "Enter SVR Code" for suspended accounts)
    - The user enters the 6-digit code from their admin notification
    - Clicking **Verify Code** checks the entry
    
 3. Progress tracking:
-   - A progress bar shows completion (e.g., "Step 1 of 5")
-   - After each correct code: "Code verified! 4 more code(s) required"
+   - A progress bar shows verification status
+   - After correct code entry: "Account verification complete! Your account is now active."
    - Incorrect codes show: "Invalid code. Please check your verification letter from admin."
    
-4. After all 5 codes are verified:
+4. After the code is verified:
    - Success message: "Account verification complete! Your account is now active."
-   - Account status is changed from `frozen`/`suspended` to `active`
+   - Account status is changed from `frozen`/`suspended`/`blocked`/`locked` to `active`
    - Page reloads automatically
    - User can now access all features
 
@@ -77,13 +76,13 @@ const status = VanstraBank.getAccountSuspensionStatus();
 #### Initialize Challenge
 ```javascript
 VanstraBank.initializeSuspensionChallenge(userId);
-// Creates a new verification session
+// Creates a verification session with 1 code based on account status
 ```
 
 #### Get Current Challenge
 ```javascript
 const challenge = VanstraBank.getCurrentSuspensionChallenge();
-// Returns: { userId, codesRequired: [], codesEntered: [], currentStep: 0, ... }
+// Returns: { userId, codesRequired: ['COT'], codesEntered: [], currentStep: 0, ... }
 ```
 
 #### Verify Code
@@ -93,9 +92,7 @@ const result = VanstraBank.verifySuspensionCode('962101');
 //   success: bool,
 //   completed: bool,
 //   message: string,
-//   currentStep: number,
-//   totalSteps: number,
-//   progress: number (0-100)
+//   nextStep: null
 // }
 ```
 
@@ -131,10 +128,11 @@ This prevents the transfer modal from opening until all codes are verified.
 ## Security Features
 
 1. **Session-based challenges**: Each session gets a unique `sessionId`
-2. **Code validation**: Codes are checked in order (must complete Step 1 before Step 2)
-3. **Auto-unblock**: Once all codes are verified, the account status changes to `active`
-4. **Override protection**: Closing the modal forces logout
-5. **Progress tracking**: Users see exactly which step they're on
+2. **Dashboard-only verification**: Suspension verification only appears on the dashboard after successful login
+3. **Code validation**: Codes are checked against account status (frozen/blocked/suspended/locked)
+4. **Auto-unblock**: Once the code is verified, the account status changes to `active`
+5. **Override protection**: Closing the modal forces logout
+6. **Progress tracking**: Users see verification status on the dashboard
 
 ## Customization
 
@@ -155,14 +153,13 @@ const SUSPENSION_CODES = {
 ### Test as User
 1. Go to [admin-v3.html](admin-v3.html)
 2. Find a test user
-3. Change their status to `frozen`
+3. Change their status to `frozen`, `blocked`, `suspended`, or `locked`
 4. Log in as that user
-5. Verify codes in order:
-   - 962101 (COT)
-   - 385247 (AFD)
-   - 704856 (SVR)
-   - 521690 (ACE)
-   - 813429 (FVP)
+5. Verify the correct code based on account status:
+   - Frozen: 962101 (COT)
+   - Blocked: 385247 (AFD)
+   - Suspended: 704856 (SVR)
+   - Locked: 521690 (ACE)
 
 ### Test Cancel
 1. On the verification modal, click **Cancel**
@@ -191,6 +188,7 @@ user.suspensionVerifiedAt = '2026-02-23T12:34:56.789Z';
 | Code too short | Prevent submission |
 | Browser refresh | Challenge persists (stored in sessionStorage) |
 | Close modal without finishing | Must log in again |
+| Login with suspended account | Login succeeds, verification modal appears on dashboard |
 
 ## Events Emitted
 

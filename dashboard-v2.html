@@ -794,336 +794,416 @@
             max-height: calc(90vh - 70px);
         }
         
-        /* Suspension Verification Modal */
+        /* Suspension Verification Modal - Redesigned */
         .suspension-verification-modal {
             position: fixed;
             inset: 0;
-            /* lighter backdrop so modal doesn't feel full-page */
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.6);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 300;
-            -webkit-backdrop-filter: blur(6px);
-            backdrop-filter: blur(6px);
-            animation: fadeInOverlay 0.25s ease;
-            padding: 24px; /* ensure breathing room on small screens */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            animation: modalFadeIn 0.3s ease-out;
+            padding: 1rem;
         }
-        
-        @keyframes fadeInOverlay {
+
+        @keyframes modalFadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
+
         .suspension-verification-modal.active {
             display: flex;
         }
-        
+
         .suspension-verification-content {
-            background: #FFFFFF;
-            border-radius: 14px;
-            padding: 1.5rem;
-            max-width: 420px;
+            background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 480px;
             width: 100%;
-            box-shadow: 0 10px 30px rgba(2,6,23,0.12);
-            animation: slideInCenter 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(2,6,23,0.04);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.05);
+            animation: modalSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
-            overflow: visible;
+            border: 1px solid rgba(0, 0, 0, 0.08);
         }
-        
-        .suspension-verification-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #C89A3A 0%, #E6B547 100%);
-            border-top-left-radius: 14px;
-            border-top-right-radius: 14px;
-        }
-        
-        @keyframes slideInCenter {
+
+        @keyframes modalSlideIn {
             from {
                 opacity: 0;
-                transform: scale(0.85) translateY(30px);
+                transform: scale(0.9) translateY(20px);
             }
             to {
                 opacity: 1;
                 transform: scale(1) translateY(0);
             }
         }
-        
+
+        /* Header Section */
         .suspension-header {
             display: flex;
-            align-items: center;
-            gap: 1.25rem;
+            align-items: flex-start;
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        
+
+        .suspension-icon-wrapper {
+            flex-shrink: 0;
+        }
+
         .suspension-icon {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            border-radius: 12px;
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            box-shadow: 0 6px 18px rgba(239, 68, 68, 0.12);
-            flex-shrink: 0;
-            animation: iconPulse 2.2s ease-in-out infinite;
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.25);
+            animation: iconBounce 2s ease-in-out infinite;
         }
-        
-        @keyframes iconPulse {
+
+        @keyframes iconBounce {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        
-        .suspension-header-text h2 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .suspension-header-content {
+            flex: 1;
         }
-        
-        .suspension-header-text p {
-            margin: 0.5rem 0 0 0;
+
+        .suspension-title {
+            margin: 0 0 0.5rem 0;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            line-height: 1.2;
+        }
+
+        .suspension-subtitle {
+            margin: 0;
             font-size: 14px;
-            color: #6B7280;
+            color: #6b7280;
             line-height: 1.5;
         }
-        
-        .suspension-progress {
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, rgba(200, 154, 58, 0.05) 0%, rgba(200, 154, 58, 0.02) 100%);
-            padding: 1.5rem;
+
+        /* Progress Section */
+        .suspension-progress-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
-            border: 1px solid rgba(200, 154, 58, 0.2);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
         }
-        
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-counter {
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            background: #e2e8f0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
         .progress-steps {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1.25rem;
             gap: 0.5rem;
         }
-        
-        .progress-step {
+
+        .step {
             flex: 1;
-            height: 8px;
-            background: #E5E7EB;
-            border-radius: 4px;
-            overflow: hidden;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
         }
-        
-        .progress-step.completed {
-            background: linear-gradient(90deg, #10B981 0%, #059669 100%);
-        }
-        
-        .progress-step.active {
-            background: linear-gradient(90deg, #C89A3A 0%, #E6B547 100%);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .progress-text {
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 12px;
-            color: #6B7280;
-            text-align: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed .step-circle {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .step.active .step-circle {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            animation: stepPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes stepPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .step-label {
+            font-size: 10px;
             font-weight: 600;
+            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
-        .verification-message {
-            background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%);
-            border: 1.5px solid #FCD34D;
-            border-radius: 14px;
+
+        .step.completed .step-label {
+            color: #059669;
+        }
+
+        .step.active .step-label {
+            color: #d97706;
+        }
+
+        /* Message Section */
+        .suspension-message {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
             padding: 1rem 1.25rem;
-            margin-bottom: 1.75rem;
-            font-size: 13px;
-            color: #78350F;
-            line-height: 1.6;
-            display: flex;
-            align-items: flex-start;
-            gap: 0.75rem;
+            margin-bottom: 2rem;
+            font-size: 14px;
+            color: #92400e;
+            line-height: 1.5;
+            display: none;
+            animation: messageSlideIn 0.3s ease;
         }
-        
-        .verification-message::before {
-            content: '⚠️';
-            flex-shrink: 0;
-            font-size: 16px;
+
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
-        .verification-message.error {
-            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
-            border-color: #FECACA;
-            color: #7F1D1D;
+
+        .suspension-message.error {
+            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+            border-color: #ef4444;
+            color: #7f1d1d;
         }
-        
-        .verification-message.error::before {
-            content: '❌';
+
+        .suspension-message.success {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            border-color: #10b981;
+            color: #065f46;
         }
-        
-        .verification-message.success {
-            background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%);
-            border-color: #A7F3D0;
-            color: #065F46;
-        }
-        
-        .verification-message.success::before {
-            content: '✅';
-        }
-        
-        .code-input-group {
+
+        /* Form Section */
+        .suspension-form {
             margin-bottom: 2rem;
         }
-        
-        .code-label {
+
+        .code-input-section {
+            margin-bottom: 2rem;
+        }
+
+        .code-input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .code-type-highlight {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+
+        .code-input-hint {
             display: block;
             font-size: 12px;
-            font-weight: 700;
-            color: #374151;
-            margin-bottom: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #6b7280;
+            margin-top: 0.25rem;
         }
-        
-        .code-label-hint {
-            font-weight: 500;
-            color: #9CA3AF;
-            font-size: 11px;
-            text-transform: none;
-            letter-spacing: 0;
-        }
-        
-        .code-input-wrapper {
+
+        .code-input-container {
             position: relative;
+            margin-top: 1rem;
         }
-        
-        .code-input {
+
+        .code-input-field {
             width: 100%;
-            padding: 1rem 1.25rem;
-            border: 2px solid #E5E7EB;
+            padding: 1.25rem 1.5rem;
+            padding-right: 3.5rem;
+            border: 2px solid #e5e7eb;
             border-radius: 12px;
-            font-size: 18px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 3px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-        
-        .code-input::placeholder {
-            color: #D1D5DB;
-            letter-spacing: 3px;
-        }
-        
-        .code-input:focus {
-            outline: none;
-            border-color: #C89A3A;
+            font-size: 20px;
+            font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+            font-weight: 600;
+            letter-spacing: 0.5rem;
+            text-align: center;
             background: white;
-            box-shadow: 0 0 0 4px rgba(200, 154, 58, 0.15);
+            transition: all 0.3s ease;
+            color: #1f2937;
         }
-        
-        .code-input.error {
-            border-color: #EF4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
-            animation: shake 0.4s ease-in-out;
+
+        .code-input-field::placeholder {
+            color: #9ca3af;
+            letter-spacing: 0.2rem;
         }
-        
-        @keyframes shake {
+
+        .code-input-field:focus {
+            outline: none;
+            border-color: #f59e0b;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+            background: #fefefe;
+        }
+
+        .code-input-field.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+            animation: inputShake 0.4s ease-in-out;
+        }
+
+        @keyframes inputShake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
-        
-        .suspension-buttons {
+
+        .code-input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        /* Action Buttons */
+        .suspension-actions {
             display: grid;
-            grid-template-columns: 1fr 1.2fr;
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-        
-        .btn-cancel {
-            padding: 1rem;
-            border: 2px solid #E5E7EB;
+
+        .action-btn {
+            padding: 1rem 1.5rem;
             border-radius: 12px;
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
-            background: white;
-            color: #6B7280;
             transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        
-        .btn-cancel:hover {
-            border-color: #D1D5DB;
-            background: #F9FAFB;
-            color: #374151;
+
+        .action-btn-secondary {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .action-btn-secondary:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
+            color: #475569;
             transform: translateY(-2px);
         }
-        
-        .btn-submit {
-            padding: 1rem;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+
+        .action-btn-primary {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.2);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
         }
-        
-        .btn-submit::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+
+        .action-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.4);
         }
-        
-        .btn-submit:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .btn-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(239, 68, 68, 0.3);
-        }
-        
-        .btn-submit:disabled {
+
+        .action-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
+            transform: none !important;
         }
-        
-        .btn-submit:active {
-            transform: translateY(-1px);
+
+        .btn-loader {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .suspension-footer {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .footer-icon {
+            font-size: 14px;
         }
         
         /* Form Elements */
@@ -2464,46 +2544,79 @@
     <!-- Suspension Verification Modal -->
     <div id="suspensionVerificationModal" class="suspension-verification-modal">
         <div class="suspension-verification-content">
+            <!-- Header with Icon and Title -->
             <div class="suspension-header">
-                <div class="suspension-icon">�</div>
-                <div class="suspension-header-text">
-                    <h2>Security Verification</h2>
-                    <p>Your account has been secured. Please verify with the codes provided by your admin.</p>
+                <div class="suspension-icon-wrapper">
+                    <div class="suspension-icon">🔒</div>
+                </div>
+                <div class="suspension-header-content">
+                    <h2 class="suspension-title">Account Verification Required</h2>
+                    <p class="suspension-subtitle">Your account has been temporarily secured for security reasons. Please enter the verification codes provided by your administrator.</p>
                 </div>
             </div>
-            
-            <div class="suspension-progress">
-                <div class="progress-steps" id="progressSteps" aria-hidden="true"></div>
-                <p class="progress-text" id="suspensionProgressText">Verification in progress</p>
-            </div>
-            
-            <div id="suspensionMessage" class="verification-message"></div>
-            
-            <form id="suspensionVerificationForm" onsubmit="handleSuspensionCodeSubmit(event)">
-                <div class="code-input-group">
-                    <label class="code-label">
-                        Enter <span id="currentCodeType">COT</span> Code
-                        <span class="code-label-hint" style="display: block; margin-top: 0.25rem;">(Received from admin)</span>
-                    </label>
-                    <div class="code-input-wrapper">
-                        <input 
-                            type="text" 
-                            id="suspensionCodeInput" 
-                            class="code-input" 
-                            placeholder="••••••" 
-                            maxlength="6" 
-                            autocomplete="off"
-                            inputmode="numeric"
-                            required
-                        >
+
+            <!-- Progress Indicator -->
+            <div class="suspension-progress-section">
+                <div class="progress-header">
+                    <span class="progress-label">Account Status Verification</span>
+                    <span class="progress-counter" id="progressCounter">Step 1 of 1</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <div class="progress-steps" id="progressSteps">
+                    <div class="step active" data-step="1">
+                        <div class="step-circle">1</div>
+                        <span class="step-label" id="currentCodeLabel">Loading...</span>
                     </div>
                 </div>
-                
-                <div class="suspension-buttons">
-                    <button type="button" class="btn-cancel" onclick="cancelSuspensionVerification()">Close</button>
-                    <button type="submit" id="suspensionSubmitBtn" class="btn-submit">Verify Code</button>
+            </div>
+
+            <!-- Status Message -->
+            <div id="suspensionMessage" class="suspension-message"></div>
+
+            <!-- Code Input Form -->
+            <form id="suspensionVerificationForm" onsubmit="handleSuspensionCodeSubmit(event)" class="suspension-form">
+                <div class="code-input-section">
+                    <label class="code-input-label">
+                        Enter <span id="currentCodeType" class="code-type-highlight">COT</span> Code
+                        <span class="code-input-hint">6-digit code received from your admin</span>
+                    </label>
+                    <div class="code-input-container">
+                        <input
+                            type="text"
+                            id="suspensionCodeInput"
+                            class="code-input-field"
+                            placeholder="000000"
+                            maxlength="6"
+                            autocomplete="off"
+                            inputmode="numeric"
+                            pattern="[0-9]{6}"
+                            required
+                        >
+                        <div class="code-input-icon">🔢</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="suspension-actions">
+                    <button type="button" class="action-btn action-btn-secondary" onclick="cancelSuspensionVerification()">
+                        <span class="btn-text">Cancel</span>
+                    </button>
+                    <button type="submit" id="suspensionSubmitBtn" class="action-btn action-btn-primary">
+                        <span class="btn-text">Verify Code</span>
+                        <div class="btn-loader" style="display: none;"></div>
+                    </button>
                 </div>
             </form>
+
+            <!-- Footer Note -->
+            <div class="suspension-footer">
+                <p class="footer-text">
+                    <span class="footer-icon">ℹ️</span>
+                    Need help? Contact your administrator for the verification codes.
+                </p>
+            </div>
         </div>
     </div>
 
@@ -3206,6 +3319,115 @@
             }
         };
 
+        // Transfer Bank Selector Data
+        const transferBanksDatabase = [
+            // United States
+            { name: 'Bank of America', country: 'United States', code: 'BOA', color: '#FF6B35', initials: 'BA' },
+            { name: 'JPMorgan Chase', country: 'United States', code: 'JPM', color: '#0066CC', initials: 'JP' },
+            { name: 'Wells Fargo', country: 'United States', code: 'WFC', color: '#D9252C', initials: 'WF' },
+            { name: 'Citigroup', country: 'United States', code: 'C', color: '#0066B2', initials: 'CI' },
+            { name: 'Goldman Sachs', country: 'United States', code: 'GS', color: '#003366', initials: 'GS' },
+            { name: 'Morgan Stanley', country: 'United States', code: 'MS', color: '#0066CC', initials: 'MS' },
+            { name: 'U.S. Bank', country: 'United States', code: 'USB', color: '#003399', initials: 'US' },
+            { name: 'Charles Schwab', country: 'United States', code: 'SCHW', color: '#004225', initials: 'CS' },
+            { name: 'Capital One', country: 'United States', code: 'COF', color: '#013166', initials: 'C1' },
+            { name: 'Ally Bank', country: 'United States', code: 'ALLY', color: '#FF6600', initials: 'AB' },
+            
+            // United Kingdom
+            { name: 'HSBC', country: 'United Kingdom', code: 'HSBC', color: '#DB0011', initials: 'HS' },
+            { name: 'Barclays', country: 'United Kingdom', code: 'BARC', color: '#00ADEF', initials: 'BA' },
+            { name: 'Lloyds Banking Group', country: 'United Kingdom', code: 'LLOY', color: '#005EB8', initials: 'LB' },
+            { name: 'Royal Bank of Scotland', country: 'United Kingdom', code: 'RBS', color: '#003366', initials: 'RB' },
+            { name: 'Santander UK', country: 'United Kingdom', code: 'SANT', color: '#EC0000', initials: 'SU' },
+            { name: 'NatWest', country: 'United Kingdom', code: 'NWG', color: '#42145F', initials: 'NW' },
+            { name: 'Virgin Money', country: 'United Kingdom', code: 'VMUK', color: '#DA001E', initials: 'VM' },
+            
+            // Germany
+            { name: 'Deutsche Bank', country: 'Germany', code: 'DB', color: '#0018A8', initials: 'DB' },
+            { name: 'Commerzbank', country: 'Germany', code: 'CBK', color: '#FFED00', initials: 'CB' },
+            { name: 'Sparkasse', country: 'Germany', code: 'SPK', color: '#005CA9', initials: 'SP' },
+            { name: 'Volksbank', country: 'Germany', code: 'VB', color: '#005CA9', initials: 'VB' },
+            { name: 'Postbank', country: 'Germany', code: 'PBNK', color: '#FFCC00', initials: 'PB' },
+            
+            // France
+            { name: 'BNP Paribas', country: 'France', code: 'BNP', color: '#0096D7', initials: 'BP' },
+            { name: 'Société Générale', country: 'France', code: 'GLE', color: '#009639', initials: 'SG' },
+            { name: 'Crédit Agricole', country: 'France', code: 'ACA', color: '#005CA9', initials: 'CA' },
+            { name: 'BPCE', country: 'France', code: 'BPCE', color: '#005EB8', initials: 'BP' },
+            
+            // Italy
+            { name: 'UniCredit', country: 'Italy', code: 'UCG', color: '#0066B2', initials: 'UC' },
+            { name: 'Intesa Sanpaolo', country: 'Italy', code: 'ISP', color: '#0066CC', initials: 'IS' },
+            { name: 'Banca Monte dei Paschi', country: 'Italy', code: 'BMPS', color: '#005CA9', initials: 'BM' },
+            
+            // Spain
+            { name: 'Santander', country: 'Spain', code: 'SAN', color: '#EC0000', initials: 'SA' },
+            { name: 'BBVA', country: 'Spain', code: 'BBVA', color: '#004481', initials: 'BB' },
+            { name: 'CaixaBank', country: 'Spain', code: 'CABK', color: '#0066B2', initials: 'CB' },
+            
+            // Netherlands
+            { name: 'ING Group', country: 'Netherlands', code: 'INGA', color: '#FF6600', initials: 'IN' },
+            { name: 'Rabobank', country: 'Netherlands', code: 'RABO', color: '#009639', initials: 'RA' },
+            { name: 'ABN AMRO', country: 'Netherlands', code: 'ABN', color: '#005EB8', initials: 'AA' },
+            
+            // Belgium
+            { name: 'KBC Group', country: 'Belgium', code: 'KBC', color: '#005CA9', initials: 'KB' },
+            { name: 'Belfius', country: 'Belgium', code: 'BELFIUS', color: '#FFED00', initials: 'BE' },
+            
+            // Switzerland
+            { name: 'UBS', country: 'Switzerland', code: 'UBSG', color: '#000000', initials: 'UB' },
+            { name: 'Credit Suisse', country: 'Switzerland', code: 'CSGN', color: '#0066B2', initials: 'CS' },
+            { name: 'Raiffeisen', country: 'Switzerland', code: 'RAIF', color: '#009639', initials: 'RA' },
+            
+            // Austria
+            { name: 'Erste Group', country: 'Austria', code: 'EBS', color: '#005CA9', initials: 'EG' },
+            { name: 'Raiffeisen Bank International', country: 'Austria', code: 'RBI', color: '#009639', initials: 'RB' },
+            
+            // Sweden
+            { name: 'Nordea', country: 'Sweden', code: 'NDA', color: '#005EB8', initials: 'NO' },
+            { name: 'Swedbank', country: 'Sweden', code: 'SWEDA', color: '#0066B2', initials: 'SW' },
+            { name: 'SEB', country: 'Sweden', code: 'SEB', color: '#005EB8', initials: 'SE' },
+            
+            // Norway
+            { name: 'DNB', country: 'Norway', code: 'DNB', color: '#005EB8', initials: 'DN' },
+            
+            // Denmark
+            { name: 'Danske Bank', country: 'Denmark', code: 'DANSKE', color: '#FF0000', initials: 'DB' },
+            
+            // Finland
+            { name: 'OP Financial Group', country: 'Finland', code: 'OP', color: '#005CA9', initials: 'OP' },
+            
+            // Poland
+            { name: 'PKO Bank Polski', country: 'Poland', code: 'PKO', color: '#005EB8', initials: 'PK' },
+            { name: 'Santander Bank Polska', country: 'Poland', code: 'SPL', color: '#EC0000', initials: 'SB' },
+            
+            // Czech Republic
+            { name: 'Česká spořitelna', country: 'Czech Republic', code: 'CSAS', color: '#005CA9', initials: 'CS' },
+            
+            // Hungary
+            { name: 'OTP Bank', country: 'Hungary', code: 'OTP', color: '#005EB8', initials: 'OT' },
+            
+            // Romania
+            { name: 'Banca Transilvania', country: 'Romania', code: 'TLV', color: '#005CA9', initials: 'BT' },
+            
+            // Portugal
+            { name: 'Caixa Geral de Depósitos', country: 'Portugal', code: 'CGD', color: '#005EB8', initials: 'CG' },
+            
+            // Greece
+            { name: 'National Bank of Greece', country: 'Greece', code: 'ETE', color: '#005EB8', initials: 'NB' },
+            
+            // Ireland
+            { name: 'Bank of Ireland', country: 'Ireland', code: 'BOI', color: '#005EB8', initials: 'BI' },
+            
+            // Luxembourg
+            { name: 'BCEE', country: 'Luxembourg', code: 'BCEE', color: '#005EB8', initials: 'BC' },
+            
+            // Other European Banks
+            { name: 'European Central Bank', country: 'European Union', code: 'ECB', color: '#003399', initials: 'EC' },
+            { name: 'World Bank', country: 'International', code: 'WORLD', color: '#0033A0', initials: 'WB' },
+            { name: 'International Monetary Fund', country: 'International', code: 'IMF', color: '#003399', initials: 'IM' }
+        ];
+
         function translateText(key, lang = 'en') {
             // Extract base language code (e.g., 'en-CA' -> 'en')
             const baseLang = lang.split('-')[0];
@@ -3413,12 +3635,24 @@
         }
         
         // Initialize demo data
-        initializeDemoMode();
+        function waitForVanstraBank() {
+            if (typeof VanstraBank !== 'undefined') {
+                initializeDemoMode();
+            } else {
+                setTimeout(waitForVanstraBank, 100);
+            }
+        }
+        waitForVanstraBank();
         
         // Check authentication
-        if (!VanstraBank.isAuthenticated()) {
-            window.location.href = 'login.html';
+        function checkAuth() {
+            if (typeof VanstraBank !== 'undefined' && !VanstraBank.isAuthenticated()) {
+                window.location.href = 'login.html';
+            } else if (typeof VanstraBank === 'undefined') {
+                setTimeout(checkAuth, 100);
+            }
         }
+        checkAuth();
 
         let currentUser = null;
         let pendingTransaction = null;
@@ -5126,107 +5360,6 @@
             }, 3000);
         }
 
-        // Transfer Bank Selector Data
-        const transferBanksDatabase = [
-            // United States
-            { name: 'Bank of America', country: 'United States', code: 'BOA', color: '#FF6B35', initials: 'BA' },
-            { name: 'JPMorgan Chase', country: 'United States', code: 'JPM', color: '#0066CC', initials: 'JP' },
-            { name: 'Wells Fargo', country: 'United States', code: 'WFC', color: '#D9252C', initials: 'WF' },
-            { name: 'Citigroup', country: 'United States', code: 'C', color: '#0066B2', initials: 'CI' },
-            { name: 'Goldman Sachs', country: 'United States', code: 'GS', color: '#003366', initials: 'GS' },
-            { name: 'Morgan Stanley', country: 'United States', code: 'MS', color: '#0066CC', initials: 'MS' },
-            { name: 'U.S. Bank', country: 'United States', code: 'USB', color: '#003399', initials: 'US' },
-            { name: 'Charles Schwab', country: 'United States', code: 'SCHW', color: '#004225', initials: 'CS' },
-            { name: 'Capital One', country: 'United States', code: 'COF', color: '#013166', initials: 'C1' },
-            { name: 'Ally Bank', country: 'United States', code: 'ALLY', color: '#FF6600', initials: 'AB' },
-            
-            // United Kingdom
-            { name: 'Barclays', country: 'United Kingdom', code: 'BARC', color: '#00A3E0', initials: 'BC' },
-            { name: 'HSBC', country: 'United Kingdom', code: 'HSBA', color: '#CE1126', initials: 'HS' },
-            { name: 'Lloyds Banking Group', country: 'United Kingdom', code: 'LLOY', color: '#00AA44', initials: 'LY' },
-            { name: 'Royal Bank of Scotland', country: 'United Kingdom', code: 'RBS', color: '#C41E3A', initials: 'RB' },
-            { name: 'Standard Chartered', country: 'United Kingdom', code: 'STAN', color: '#003D7A', initials: 'SC' },
-            { name: 'Revolut', country: 'United Kingdom', code: 'REV', color: '#222D5F', initials: 'RV' },
-            { name: 'Wise', country: 'United Kingdom', code: 'WISE', color: '#0066CC', initials: 'WS' },
-            
-            // Canada
-            { name: 'Royal Bank of Canada', country: 'Canada', code: 'RY', color: '#004098', initials: 'RY' },
-            { name: 'TD Bank', country: 'Canada', code: 'TD', color: '#00AA44', initials: 'TD' },
-            { name: 'Bank of Nova Scotia', country: 'Canada', code: 'BNS', color: '#C41E3A', initials: 'BS' },
-            { name: 'Bank of Montreal', country: 'Canada', code: 'BMO', color: '#0066CC', initials: 'BM' },
-            { name: 'CIBC', country: 'Canada', code: 'CM', color: '#A61930', initials: 'CB' },
-            
-            // Germany
-            { name: 'Deutsche Bank', country: 'Germany', code: 'DBK', color: '#002D5E', initials: 'DB' },
-            { name: 'Commerzbank', country: 'Germany', code: 'CBK', color: '#004999', initials: 'CB' },
-            { name: 'Bayerische Motoren Werke Bank', country: 'Germany', code: 'BMW', color: '#0066B2', initials: 'BM' },
-            { name: 'DZ Bank', country: 'Germany', code: 'DZB', color: '#003D7A', initials: 'DZ' },
-            
-            // France
-            { name: 'BNP Paribas', country: 'France', code: 'BNP', color: '#004B87', initials: 'BP' },
-            { name: 'Société Générale', country: 'France', code: 'GLE', color: '#0066CC', initials: 'SG' },
-            { name: 'Crédit Agricole', country: 'France', code: 'ACA', color: '#00AA44', initials: 'CA' },
-            { name: 'La Banque Postale', country: 'France', code: 'LBP', color: '#FDB715', initials: 'LB' },
-            
-            // Japan
-            { name: 'Mitsubishi UFJ Financial Group', country: 'Japan', code: 'MUFG', color: '#E30613', initials: 'MU' },
-            { name: 'Sumitomo Mitsui Financial Group', country: 'Japan', code: 'SMFG', color: '#003D7A', initials: 'SM' },
-            { name: 'Mizuho Financial Group', country: 'Japan', code: 'MFG', color: '#E30613', initials: 'MZ' },
-            { name: 'Nomura Holdings', country: 'Japan', code: 'NOM', color: '#003399', initials: 'NM' },
-            
-            // China
-            { name: 'Industrial and Commercial Bank of China', country: 'China', code: 'ICBC', color: '#C41E3A', initials: 'IC' },
-            { name: 'China Construction Bank', country: 'China', code: 'CCB', color: '#A61830', initials: 'CC' },
-            { name: 'Bank of China', country: 'China', code: 'BOC', color: '#E30613', initials: 'BC' },
-            { name: 'Agricultural Bank of China', country: 'China', code: 'ABC', color: '#2D8659', initials: 'AB' },
-            
-            // India
-            { name: 'State Bank of India', country: 'India', code: 'SBI', color: '#1F4788', initials: 'SB' },
-            { name: 'HDFC Bank', country: 'India', code: 'HDFC', color: '#0066B2', initials: 'HD' },
-            { name: 'ICICI Bank', country: 'India', code: 'ICICI', color: '#004B87', initials: 'IC' },
-            { name: 'Axis Bank', country: 'India', code: 'AXIS', color: '#004998', initials: 'AX' },
-            { name: 'Kotak Mahindra Bank', country: 'India', code: 'KMB', color: '#8B0000', initials: 'KM' },
-            
-            // Australia
-            { name: 'Commonwealth Bank of Australia', country: 'Australia', code: 'CBA', color: '#1A472B', initials: 'CB' },
-            { name: 'Westpac', country: 'Australia', code: 'WBC', color: '#003478', initials: 'WP' },
-            { name: 'ANZ Bank', country: 'Australia', code: 'ANZ', color: '#0066B3', initials: 'AZ' },
-            { name: 'NAB', country: 'Australia', code: 'NAB', color: '#8B0000', initials: 'NB' },
-            
-            // Switzerland
-            { name: 'UBS', country: 'Switzerland', code: 'UBSG', color: '#EB001B', initials: 'UB' },
-            { name: 'Credit Suisse', country: 'Switzerland', code: 'CS', color: '#0033A0', initials: 'CS' },
-            { name: 'Zurich Cantonal Bank', country: 'Switzerland', code: 'ZKB', color: '#004B87', initials: 'ZK' },
-            
-            // Singapore
-            { name: 'DBS Bank', country: 'Singapore', code: 'D05', color: '#D92228', initials: 'DB' },
-            { name: 'OCBC Bank', country: 'Singapore', code: 'O39', color: '#E30613', initials: 'OC' },
-            { name: 'United Overseas Bank', country: 'Singapore', code: 'U11', color: '#FF0000', initials: 'UO' },
-            
-            // Hong Kong
-            { name: 'HSBC Hong Kong', country: 'Hong Kong', code: 'HSBC-HK', color: '#EB001B', initials: 'HS' },
-            { name: 'Bank of China Hong Kong', country: 'Hong Kong', code: 'BOC-HK', color: '#E30613', initials: 'BC' },
-            { name: 'Standard Chartered Hong Kong', country: 'Hong Kong', code: 'SC-HK', color: '#003D7A', initials: 'SC' },
-            
-            // Brazil
-            { name: 'Banco do Brasil', country: 'Brazil', code: 'BBAS', color: '#003C7F', initials: 'BB' },
-            { name: 'Bradesco', country: 'Brazil', code: 'BBD', color: '#C41C3B', initials: 'BD' },
-            { name: 'Itaú Unibanco', country: 'Brazil', code: 'ITUB', color: '#E30613', initials: 'IT' },
-            { name: 'Caixa Econômica Federal', country: 'Brazil', code: 'CEF', color: '#0066B2', initials: 'CX' },
-            
-            // Mexico
-            { name: 'BBVA México', country: 'Mexico', code: 'BBVA', color: '#0066B2', initials: 'BM' },
-            { name: 'Banco Santander México', country: 'Mexico', code: 'SAN', color: '#FF0000', initials: 'SM' },
-            { name: 'Scotiabank México', country: 'Mexico', code: 'SCBM', color: '#004B87', initials: 'SB' },
-            { name: 'HSBC México', country: 'Mexico', code: 'HSBC-MX', color: '#EB001B', initials: 'HM' },
-            
-            // South Africa
-            { name: 'ABSA Group', country: 'South Africa', code: 'ABSA', color: '#00A3E0', initials: 'AB' },
-            { name: 'Standard Bank Group', country: 'South Africa', code: 'SBK', color: '#003D7A', initials: 'SB' },
-            { name: 'FirstRand Limited', country: 'South Africa', code: 'FSR', color: '#0066B2', initials: 'FR' },
-            { name: 'Nedbank Group', country: 'South Africa', code: 'NED', color: '#00AA44', initials: 'ND' },
-        ];
-
         let allTransferBanks = [...transferBanksDatabase];
 
         function getBankLogo(bank) {
@@ -5418,12 +5551,31 @@
         }
 
         function updateSuspensionModal(challenge) {
-            const currentCodeType = challenge.codesRequired[challenge.currentStep];
+            const currentCodeType = challenge.codesRequired[0]; // Only one code now
+            const currentStep = 1;
+            const totalSteps = 1;
+            const progressPercent = 0; // Start at 0%, will go to 100% when completed
 
-            // Do NOT show total steps or remaining count — professional UX
-            document.getElementById('suspensionProgressText').textContent = 'Verification in progress';
+            // Update progress counter
+            document.getElementById('progressCounter').textContent = `Step ${currentStep} of ${totalSteps}`;
 
-            // Update code label (only show the current code type)
+            // Update progress bar
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+
+            // Update step indicator (only one step now)
+            const stepLabel = document.getElementById('currentCodeLabel');
+            if (stepLabel) {
+                // Map code types to readable names
+                const codeNames = {
+                    'COT': 'Account Frozen',
+                    'AFD': 'Account Blocked',
+                    'SVR': 'Account Suspended',
+                    'ACE': 'Account Locked'
+                };
+                stepLabel.textContent = codeNames[currentCodeType] || currentCodeType;
+            }
+
+            // Update code label
             document.getElementById('currentCodeType').textContent = currentCodeType;
 
             // Clear input and prepare for entry
@@ -5433,18 +5585,16 @@
             inputEl.disabled = false;
             inputEl.focus();
 
-            // Update message
+            // Clear message
             const messageEl = document.getElementById('suspensionMessage');
-            messageEl.textContent = `Enter the ${currentCodeType} code provided by your administrator.`;
+            messageEl.textContent = '';
             messageEl.classList.remove('error', 'success');
-            messageEl.classList.add('verification-message');
+            messageEl.style.display = 'none';
 
-            // Ensure submit button is in Verify mode
+            // Reset submit button
             const submitBtn = document.getElementById('suspensionSubmitBtn');
-            submitBtn.type = 'submit';
-            submitBtn.textContent = 'Verify Code';
             submitBtn.disabled = false;
-            submitBtn.onclick = null;
+            submitBtn.innerHTML = '<span class="btn-text">Verify Code</span><div class="btn-loader" style="display: none;"></div>';
         }
 
         function handleSuspensionCodeSubmit(event) {
@@ -5465,7 +5615,14 @@
 
             submitBtn.disabled = true;
             codeInput.disabled = true;
-            submitBtn.textContent = '⏳ Verifying...';
+
+            // Show loading state
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoader = submitBtn.querySelector('.btn-loader');
+            if (btnText && btnLoader) {
+                btnText.textContent = 'Verifying...';
+                btnLoader.style.display = 'block';
+            }
 
             setTimeout(() => {
                 const result = VanstraBank.verifySuspensionCode(code);
@@ -5478,8 +5635,13 @@
                     messageEl.textContent = '❌ ' + (result.error || 'Invalid code');
                     messageEl.classList.remove('success');
                     messageEl.classList.add('error');
+
+                    // Reset button
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Try Again';
+                    if (btnText && btnLoader) {
+                        btnText.textContent = 'Try Again';
+                        btnLoader.style.display = 'none';
+                    }
                     submitBtn.style.background = 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)';
                 } else if (result.completed) {
                     // Final code — finalize verification
@@ -5488,11 +5650,20 @@
                     messageEl.textContent = '✅ ' + result.message;
                     messageEl.classList.remove('error');
                     messageEl.classList.add('success');
+
+                    // Success state
                     submitBtn.disabled = true;
-                    submitBtn.textContent = '✅ Account Unlocked!';
+                    if (btnText && btnLoader) {
+                        btnText.textContent = 'Account Unlocked!';
+                        btnLoader.style.display = 'none';
+                    }
                     submitBtn.style.background = 'linear-gradient(135deg, #10B981 0%, #059669 100%)';
 
-                    console.log('🎉 All suspension codes verified! Account unlocked.');
+                    console.log('🎉 Account verification complete! Account unlocked.');
+
+                    // Update progress to 100%
+                    document.getElementById('progressFill').style.width = '100%';
+                    document.getElementById('progressCounter').textContent = 'Complete';
 
                     // Remove blocking overlay
                     const blockOverlay = document.getElementById('suspensionBlockOverlay');
@@ -5520,7 +5691,10 @@
                     // Turn submit into a Contact Support button
                     submitBtn.type = 'button';
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Contact Support';
+                    if (btnText && btnLoader) {
+                        btnText.textContent = 'Contact Support';
+                        btnLoader.style.display = 'none';
+                    }
                     submitBtn.style.background = 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)';
                     submitBtn.onclick = () => {
                         // Open support modal or redirect
@@ -5543,7 +5717,10 @@
                     // Turn submit into a Continue button
                     submitBtn.type = 'button';
                     submitBtn.disabled = false;
-                    submitBtn.textContent = 'Continue';
+                    if (btnText && btnLoader) {
+                        btnText.textContent = 'Continue';
+                        btnLoader.style.display = 'none';
+                    }
                     submitBtn.style.background = '';
                     submitBtn.onclick = () => {
                         revealNextCode();
