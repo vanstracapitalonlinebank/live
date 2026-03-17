@@ -201,14 +201,18 @@ const VanstraBank = (function() {
         }
 
         // Check account status for restrictions
-        if (user.accountStatus === 'frozen') {
-            return { success: false, error: 'Account frozen. Enter suspension code to unlock.', requiresCode: true, codeType: 'COT', restrictionType: 'frozen' };
-        }
-        if (user.accountStatus === 'blocked') {
-            return { success: false, error: 'Account blocked. Enter suspension code to unlock.', requiresCode: true, codeType: 'AFD', restrictionType: 'blocked' };
-        }
-        if (user.accountStatus === 'suspended') {
-            return { success: false, error: 'Account suspended. Enter suspension code to unlock.', requiresCode: true, codeType: 'SVR', restrictionType: 'suspended' };
+        // Determine if account is restricted (frozen/blocked/suspended)
+        let restrictionType = null;
+        let codeType = null;
+        if (user.accountStatus === 'frozen' || user.status === 'frozen') {
+            restrictionType = 'frozen';
+            codeType = 'COT';
+        } else if (user.accountStatus === 'blocked' || user.status === 'blocked') {
+            restrictionType = 'blocked';
+            codeType = 'AFD';
+        } else if (user.accountStatus === 'suspended' || user.status === 'suspended') {
+            restrictionType = 'suspended';
+            codeType = 'SVR';
         }
 
         // Verify password (support multiple legacy formats)
@@ -286,10 +290,13 @@ const VanstraBank = (function() {
         }
 
         console.log('✅ LOGIN SUCCESS:', {email: user.email, sessionToken: session.token.substring(0, 20) + '...'});
-        return { 
-            success: true, 
+        return {
+            success: true,
             user: sanitizeForClient(user),
-            sessionToken: session.token
+            sessionToken: session.token,
+            requiresCode: !!restrictionType,
+            restrictionType,
+            codeType
         };
     }
 
