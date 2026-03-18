@@ -133,38 +133,52 @@
             const loginBtn = document.getElementById('loginBtn');
             const errorMsg = document.getElementById('errorMessage');
 
-            console.log('📝 LOGIN FORM SUBMITTED:', {email});
+            if (!email || !password) {
+                errorMsg.textContent = 'Please enter both email and password';
+                errorMsg.classList.add('show');
+                return;
+            }
+
             loginBtn.disabled = true;
             loginBtn.textContent = 'Signing in...';
             errorMsg.classList.remove('show');
 
-            setTimeout(() => {
-                console.log('🔐 Calling VanstraBank.login()');
-                const result = VanstraBank.login(email, password);
-                console.log('📋 Login result:', {success: result.success, hasSessionToken: !!result.sessionToken});
-                
-                if (result.success) {
-                    console.log('✅ Login successful, setting currentSession');
-                    localStorage.setItem('currentSession', result.sessionToken);
-                    console.log('💾 currentSession saved:', result.sessionToken.substring(0, 20) + '...');
-                    
-                    // Verify it was saved
-                    const verify = localStorage.getItem('currentSession');
-                    console.log('✓ Verification: currentSession in localStorage:', verify ? 'YES' : 'NO');
-                    
-                    // Redirect to dashboard (suspension verification will be handled there)
-                    console.log('🚀 Redirecting to dashboard...');
+            // Call backend API
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.requiresOTP) {
+                    // Redirect to OTP verification page with temp token and email
+                    const params = new URLSearchParams({
+                        tempToken: data.tempToken,
+                        email: data.email
+                    });
+                    window.location.href = `verify-otp.html?${params}`;
+                } else if (data.success) {
+                    // Fallback for cases without OTP (shouldn't happen with new system)
+                    localStorage.setItem('authToken', data.token);
+                    localStorage.setItem('currentSession', data.token);
                     window.location.href = 'dashboard-v2.html';
                 } else {
-                    console.log('❌ Login failed:', result.error);
-                    
-                    errorMsg.textContent = result.error;
+                    errorMsg.textContent = data.message || 'Login failed';
                     errorMsg.classList.add('show');
-                    
                     loginBtn.disabled = false;
                     loginBtn.textContent = 'Sign In';
                 }
-            }, 600);
+            })
+            .catch(error => {
+                console.error('Login error:', error);
+                errorMsg.textContent = 'An error occurred. Please try again.';
+                errorMsg.classList.add('show');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Sign In';
+            });
         }
 
         function showError(message) {
